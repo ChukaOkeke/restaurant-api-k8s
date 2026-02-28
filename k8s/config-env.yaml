@@ -1,0 +1,16 @@
+# External configuration data for the Django API to interact with the MySQL database
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-config
+data:
+  # --- DJANGO SETTINGS ---
+  DEBUG: "True" # Set to 'False' in production
+  ALLOWED_HOSTS: "*"  # Allow all hosts
+  
+  # --- DATABASE CONFIGURATION ---
+  # These variables map directly to the Django DATABASES setting
+  DB_NAME: "AsgardCuisines"
+  DB_USER: "asgard_admin"
+  DB_HOST: mysql-service  # MySQL Service name
+  DB_PORT: "3306"
