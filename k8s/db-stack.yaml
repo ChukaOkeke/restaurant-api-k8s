@@ -1,0 +1,64 @@
+# Deployment and Service for the MySQL database used by the restaurant Django web API 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+  labels:
+    name: mysql-deployment
+    app: restaurant-api
+spec:
+  replicas: 1 # Number of pod replicas to run
+  selector:
+    matchLabels:
+      name: mysql-pod
+      app: restaurant-api
+  # Configuration for the pods
+  template:
+    metadata:
+      name: mysql-pod
+      labels:
+        name: mysql-pod
+        app: restaurant-api
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports:
+        - containerPort: 3306 # Port that the container listens on
+          # Environment variables that the official MySQL image expects (env field directly references the key)
+        env:
+        - name: MYSQL_DATABASE  # The name the DB container wants
+          valueFrom:
+            configMapKeyRef:
+              name: api-config  # The ConfigMap source
+              key: DB_NAME  # The source key ("AsgardCuisines")
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: api-config  
+              key: DB_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: api-secrets   # The Secret source
+              key: DB_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: api-secrets   
+              key: MYSQL_ROOT_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  labels:
+    name: mysql-service
+    app: restaurant-api
+spec:
+  ports:
+    - port: 3306  # Port exposed by the Service
+      targetPort: 3306  # Port on the pod to forward the request to
+  selector:
+    name: mysql-pod
+    app: restaurant-api

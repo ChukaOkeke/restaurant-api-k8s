@@ -1,0 +1,51 @@
+# Deployment and Service for the restaurant Django web API 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    name: webapp-deployment
+    app: restaurant-api
+spec:
+  replicas: 1 # Number of pod replicas to run
+  selector:
+    matchLabels:
+      name: webapp-pod
+      app: restaurant-api
+  # Configuration for the pods
+  template:
+    metadata:
+      name: webapp-pod
+      labels:
+        name: webapp-pod
+        app: restaurant-api
+    spec:
+      containers:
+      - name: webapp
+        image: chukaokeke/restaurant-api:v2
+        ports:
+        - containerPort: 8000 # Port that the container listens on
+          # Environment variables that the Django API expects (envFrom field directly references the file)  
+        envFrom:
+        - configMapRef:
+            name: api-config  # The ConfigMap source
+        - secretRef:
+            name: api-secrets # The Secret source
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+  labels:
+    name: webapp-service
+    app: restaurant-api
+spec:
+  type: NodePort
+  ports:
+    - port: 8000  # Port exposed by the Service
+      targetPort: 8000  # Port on the pod to forward the request to
+      nodePort: 31000 # Port on each node to expose the Service
+  selector:
+    name: webapp-pod
+    app: restaurant-api
+  
