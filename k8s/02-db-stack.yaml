@@ -1,4 +1,5 @@
-# Deployment and Service for the MySQL database used by the restaurant Django web API 
+# Deployment, Service, and PersistentVolume for the MySQL database used by the restaurant Django web API 
+# The MySQL database Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -47,7 +48,15 @@ spec:
             secretKeyRef:
               name: api-secrets   
               key: MYSQL_ROOT_PASSWORD
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql # The standard MySQL data path
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pvc # This should match the metadata.name in your PVC
 ---
+# The internal Service to expose the MySQL database to other pods (like the Django API) within the cluster
 apiVersion: v1
 kind: Service
 metadata:
@@ -62,3 +71,28 @@ spec:
   selector:
     name: mysql-pod
     app: restaurant-api
+---
+# The Physical Storage for the pod (PV)
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data" # This folder is inside Minikube
+---
+# Requests specific resource size from the PersistentVolume for the pod (PVC)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
