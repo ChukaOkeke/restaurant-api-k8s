@@ -1,4 +1,5 @@
 # Deployment and Service for the restaurant Django web API 
+# The Django web API Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,7 +23,8 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: chukaokeke/restaurant-api:v2
+        image: chukaokeke/restaurant-api:v3
+        imagePullPolicy: Always  # Forces Minikube to check Docker Hub for the latest v3
         ports:
         - containerPort: 8000 # Port that the container listens on
           # Environment variables that the Django API expects (envFrom field directly references the file)  
@@ -32,6 +34,7 @@ spec:
         - secretRef:
             name: api-secrets # The Secret source
 ---
+# The external Service to expose the Django web API to the outside world (e.g., your browser)
 apiVersion: v1
 kind: Service
 metadata:

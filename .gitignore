@@ -147,7 +147,7 @@ ENV/
 env.bak/
 venv.bak/
 *.pyc
-k8s/secrets.yaml
+*secrets.yaml
 
 
 # Spyder project settings
