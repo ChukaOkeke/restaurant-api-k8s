@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: chukaokeke/restaurant-api:v3
+        image: chukaokeke/restaurant-api:v3.2
         imagePullPolicy: Always  # Forces Minikube to check Docker Hub for the latest v3
         ports:
         - containerPort: 8000 # Port that the container listens on
@@ -48,6 +48,7 @@ spec:
     - port: 8000  # Port exposed by the Service
       targetPort: 8000  # Port on the pod to forward the request to
       nodePort: 31000 # Port on each node to expose the Service
+      name: http-webapp # Name for the port, used by ServiceMonitor
   selector:
     name: webapp-pod
     app: restaurant-api

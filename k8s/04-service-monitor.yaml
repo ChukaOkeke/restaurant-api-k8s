@@ -1,0 +1,20 @@
+# The Prometheus service monitor 
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: webapp-monitor
+  namespace: monitoring # It's common to put monitoring resources in a separate namespace
+  labels:
+    release: monitoring
+spec:
+  namespaceSelector:
+    matchNames:
+      - default  # Tells Prometheus to look in the 'default' namespace for the target service
+  selector:
+    matchLabels:
+      app: restaurant-api # Matches the api-stack.yaml
+  endpoints:
+  - port: http-webapp # Matches the name of the port in the api service
+    path: /metrics
+    interval: 30s # How often to scrape, adjust as needed
+    scrapeTimeout: 10s # Timeout for scraping, not more than interval, adjust as needed
