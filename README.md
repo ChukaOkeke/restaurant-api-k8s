@@ -90,7 +90,7 @@ while true; do curl -s api-service-endpoint/api/ > /dev/null; sleep 0.1; done
  - Cost-efficient local container orchestration
  - Secure handling of secrets
  - Container portability
- - Clear seperation of services
+ - Clear separation of services
  - Metrics-only observability 
 
 
