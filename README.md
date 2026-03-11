@@ -139,6 +139,7 @@ while true; do curl -s api-service-endpoint/api/ > /dev/null; sleep 0.1; done
 
 **3. Key Design Decisions & Trade-offs**  
 - Chose Kubernetes (Minikube) over Docker Compose for orchestration to simulate a production-grade environment, enabling features like self-healing, rolling updates, and automated service discovery that are essential for scaling.
+- Chose Helm to manage the complex deployment of the Prometheus ecosystem; this allowed for a standardized, repeatable installation of the Prometheus Operator, Grafana, and Kube-State-Metrics using a single command.
 - Implemented Prometheus Operator for observability to manage the monitoring lifecycle as code, and ServiceMonitors were used to decouple application discovery from the Prometheus configuration, ensuring the stack is "observable by default".
 - Utilized PersistentVolumes (PV) and PersistentVolumeClaims (PVC) to decouple the MySQL storage layer from the pod lifecycle to ensure data persistence across cluster restarts and pod failures.
 - Replaced standard .env files with native Kubernetes Secrets to leverage cluster-level encryption and prepare for future integration with cloud-native providers like AWS Secrets Manager.
