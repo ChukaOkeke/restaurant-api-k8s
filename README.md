@@ -149,23 +149,9 @@ while true; do curl -s api-service-endpoint/api/ > /dev/null; sleep 0.1; done
 
    
 **4. Implementation**  
- I used Minikube to spin up the local Kubernetes cluster. Used Kubectl to interact with the cluster. Used Prometheus Operator to monitor the cluster and API service metrics, and Grafana to visualize those metrics. 
+ I used Minikube to spin up the local Kubernetes cluster for the multi-container orchestration (Django API in one container, MySQL database in another). Used Kubectl to interact with the cluster. Used Helm to integrate the observability stack (Prometheus/Grafana). Used Prometheus Operator to monitor the cluster and API service metrics, and Grafana to visualize those metrics.  
 
-
-**5. Quality Assurance & Testing**  
- I simulated traffic on the API service using Ubuntu terminal to see live cluster and API metrics in the Grafana dashboard:
-
-```bash     
-while true; do curl -s api-service-endpoint/api/ > /dev/null; sleep 0.1; done
-```  
-
-**6. Security**  
- Kubernetes Secrets was used for security to handle sensitive data like database credentials, and to ensure cluster-level encryption of this data.
-
-**7. Orchestration & Observability**  
- I used Minikube for the cluster provisioning and Kubernetes for the multi-container orchestration (Django API in one container, MySQL database in another). Used Helm to integrate the observability stack (Prometheus/Grafana).
-
- **Kubernetes Rollout**  
+  **Kubernetes Rollout**  
 
  ![Kubernetes Rollout](./assets/k8s-rollout.png) 
 
@@ -176,6 +162,18 @@ while true; do curl -s api-service-endpoint/api/ > /dev/null; sleep 0.1; done
   **API Metrics**   
 
  ![API Metrics](./assets/api-metrics.png)
+
+
+**5. Quality Assurance & Testing**  
+ I simulated traffic on the API service using Ubuntu terminal to see live cluster and API metrics in the Grafana dashboard:
+
+```bash     
+while true; do curl -s api-service-endpoint/api/ > /dev/null; sleep 0.1; done
+```  
+
+
+**6. Security**  
+ Kubernetes Secrets was used for security to handle sensitive data like database credentials, and to ensure cluster-level encryption of this data.
 
 
 **Tech Stack**  
