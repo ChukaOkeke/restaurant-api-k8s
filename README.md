@@ -86,7 +86,7 @@ while true; do curl -s api-service-endpoint/api/ > /dev/null; sleep 0.1; done
  **Problem Statement**  
  The goal was to architect, orchestrate, and monitor a secure, scalable backend API for restaurant bookings and menu management that could evolve from Minikube/Kubernetes, and later to cloud-native services.  
 
- **Constraints**  
+ **Key Features & Constraints**  
  - Cost-efficient local container orchestration
  - Secure handling of secrets
  - Container portability
